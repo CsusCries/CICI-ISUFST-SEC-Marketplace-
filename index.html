@@ -1,0 +1,3836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CICI - ISUFST-SEC Market Place</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --bg-light: #1e293b;
+            --bg-white: #0f172a;
+            --border: #334155;
+            --text-dark: #f1f5f9;
+            --text-gray: #cbd5e1;
+            --text-light: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding-bottom: 80px;
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--bg-white);
+            padding: 16px 16px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-back {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .header-back.show {
+            display: block;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .header-logo i {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-icon {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-dark);
+            width: calc(100% - 32px);
+            margin: 0 16px;
+        }
+
+        .search-bar::placeholder {
+            color: var(--text-gray);
+        }
+
+        /* FILTERS */
+        .filters-section {
+            padding: 16px 0;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            padding: 0 16px;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 16px 8px 16px;
+            margin-bottom: 12px;
+        }
+
+        .pill {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .pill.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 0 16px;
+        }
+
+        .filter-select {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        /* SCREEN MANAGEMENT */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* TRENDING SECTION */
+        .trending-section {
+            padding: 16px 0;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trending-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            padding: 0 16px;
+        }
+
+        .trending-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 16px 8px 16px;
+            scroll-behavior: smooth;
+        }
+
+        .trending-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .trending-scroll::-webkit-scrollbar-track {
+            background: var(--bg-white);
+            border-radius: 2px;
+        }
+
+        .trending-scroll::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .trending-card,
+        .newly-added-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 12px;
+            min-width: 280px;
+            flex-shrink: 0;
+        }
+
+        .newly-added-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            padding: 0 16px;
+        }
+
+        .newly-added-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 16px 8px 16px;
+            scroll-behavior: smooth;
+        }
+
+        .newly-added-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .newly-added-scroll::-webkit-scrollbar-track {
+            background: var(--bg-white);
+            border-radius: 2px;
+        }
+
+        .newly-added-scroll::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .trending-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #92400e, #b45309);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .trending-info h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .trending-info p {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+        }
+
+        .trending-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        /* LISTINGS GRID */
+        .listings-section {
+            padding: 0 16px 16px 16px;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 16px;
+        }
+
+        .listings-grid.cols-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .listings-grid.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .listings-grid.cols-4 {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            gap: 16px;
+            margin: 16px 16px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .column-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-end;
+            width: fit-content;
+            margin: 0;
+        }
+
+        .filter-compact {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-compact-label {
+            font-size: 12px;
+            color: var(--text-dark);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .filter-compact-select {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            flex: 1;
+        }
+
+        .column-label {
+            font-size: 12px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .column-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            color: var(--text-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .column-btn:hover {
+            background: var(--border);
+            color: var(--text-dark);
+        }
+
+        .column-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ADMIN SCREEN */
+        .admin-content {
+            padding: 16px;
+        }
+
+        .admin-header {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .admin-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .admin-subtitle {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .admin-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .admin-tab {
+            padding: 12px;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.2s;
+        }
+
+        .admin-tab:hover {
+            background: var(--border);
+        }
+
+        .admin-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .pending-item {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .pending-header {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .pending-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+        }
+
+        .pending-info h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .pending-info p {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+        }
+
+        .pending-details {
+            background: var(--bg-white);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 11px;
+        }
+
+        .pending-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: var(--text-gray);
+        }
+
+        .pending-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .pending-detail-label {
+            font-weight: 500;
+        }
+
+        .pending-detail-value {
+            color: var(--text-dark);
+        }
+
+        .pending-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-approve {
+            padding: 8px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-reject {
+            padding: 8px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-form {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .genre-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+        }
+
+        .genre-item {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-dark);
+        }
+
+        .genre-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-card-label {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .btn-add {
+            padding: 10px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .admin-nav-secret {
+            position: fixed;
+            bottom: 100px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+        }
+
+        .admin-nav-secret.show {
+            display: flex;
+        }
+
+        .listing-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            position: relative;
+        }
+
+        .listing-image.green {
+            background: linear-gradient(135deg, #065f46, #10b981);
+        }
+
+        .listing-image.brown {
+            background: linear-gradient(135deg, #78350f, #b45309);
+        }
+
+        .listing-image.blue {
+            background: linear-gradient(135deg, #0c4a6e, #0284c7);
+        }
+
+        .listing-image.darkred {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+        }
+
+        .status-badge.sold {
+            background: var(--danger);
+        }
+
+        .listing-info {
+            padding: 12px;
+        }
+
+        .listing-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .listing-condition {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+        }
+
+        .listing-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .listing-seller {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .seller-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .seller-name {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .listing-action {
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .load-more {
+            width: calc(100% - 32px);
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 16px;
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+
+        /* CREATE LISTING SCREEN */
+        .create-listing-content {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 10px;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 32px 16px;
+            text-align: center;
+            background: var(--bg-light);
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .condition-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .condition-option {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .condition-option.selected {
+            border: 2px solid var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .condition-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-top: 4px;
+        }
+
+        .condition-desc {
+            font-size: 10px;
+            color: var(--text-gray);
+            margin-top: 2px;
+        }
+
+        .preview-box {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100px;
+            background: var(--bg-white);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .preview-detail {
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .tips-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--warning);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tips-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+            font-size: 11px;
+            color: var(--warning);
+        }
+
+        .tips-list li {
+            margin-bottom: 4px;
+        }
+
+        .after-post-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .benefit-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .benefit-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .benefit-text {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .btn-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-primary {
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            padding: 10px;
+            background: transparent;
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* MESSAGES SCREEN */
+        .messages-container {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 0;
+            height: calc(100vh - 160px);
+        }
+
+        .messages-list {
+            background: var(--bg-white);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .messages-search {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .message-item {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .message-item:hover {
+            background: var(--bg-light);
+        }
+
+        .message-item.active {
+            background: var(--bg-light);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .message-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            flex: 1;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: var(--text-gray);
+        }
+
+        .message-preview {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .chat-window {
+            background: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+        }
+
+        .chat-header {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        .bubble {
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .bubble.received {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            margin-right: auto;
+        }
+
+        .bubble.sent {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        /* WISHLIST SCREEN */
+        .wishlist-content {
+            padding: 16px;
+        }
+
+        .wishlist-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .wishlist-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .wishlist-image {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .wishlist-image.green {
+            background: linear-gradient(135deg, #065f46, #10b981);
+        }
+
+        .wishlist-image.brown {
+            background: linear-gradient(135deg, #78350f, #b45309);
+        }
+
+        .wishlist-image.blue {
+            background: linear-gradient(135deg, #0c4a6e, #0284c7);
+        }
+
+        .wishlist-image.darkred {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+        }
+
+        .wishlist-info {
+            padding: 10px;
+        }
+
+        .wishlist-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .wishlist-price {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .wishlist-btn {
+            width: 100%;
+            padding: 6px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* PROFILE SCREEN */
+        .profile-content {
+            padding: 16px;
+        }
+
+        .profile-header {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .profile-id {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .profile-verified {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .badges-section {
+            margin-bottom: 16px;
+        }
+
+        .badges-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .badges-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge.trusted {
+            color: var(--success);
+        }
+
+        .badge.quick {
+            color: var(--primary);
+        }
+
+        .badge.top {
+            color: var(--warning);
+        }
+
+        .profile-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .profile-btn {
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .profile-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .listings-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .listings-view-all {
+            font-size: 11px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .seller-listing {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: grid;
+            grid-template-columns: 60px 1fr 40px;
+            gap: 12px;
+        }
+
+        .seller-listing-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .seller-listing-image.green {
+            background: linear-gradient(135deg, #065f46, #10b981);
+        }
+
+        .seller-listing-image.brown {
+            background: linear-gradient(135deg, #78350f, #b45309);
+        }
+
+        .seller-listing-image.blue {
+            background: linear-gradient(135deg, #0c4a6e, #0284c7);
+        }
+
+        .seller-listing-image.darkred {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+        }
+
+        .seller-listing-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .seller-listing-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .seller-listing-desc {
+            font-size: 10px;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+        }
+
+        .seller-listing-price {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .seller-listing-status {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .listing-badge {
+            background: var(--primary);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .listing-badge.sold {
+            background: var(--danger);
+        }
+
+        .listing-views {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .ratings-section {
+            margin-top: 16px;
+        }
+
+        .ratings-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .rating-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .rating-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .rating-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .rating-meta {
+            font-size: 10px;
+            color: var(--text-gray);
+        }
+
+        .rating-stars {
+            font-size: 12px;
+            color: var(--warning);
+            margin-left: auto;
+        }
+
+        .rating-text {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .rating-date {
+            font-size: 10px;
+            color: var(--text-light);
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            z-index: 100;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 8px 0;
+            gap: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px;
+            color: var(--text-gray);
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+    
+        /* HORIZONTAL CATEGORY FILTER */
+        .sort-compact { display:flex; justify-content:flex-end; padding:0 16px; }
+        .category-scroll { display:flex; gap:8px; overflow-x:auto; padding:4px 16px 12px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+        .category-scroll::-webkit-scrollbar { display:none; }
+        .cat-pill { flex:0 0 auto; padding:8px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dark); font-size:12px; font-weight:500; white-space:nowrap; cursor:pointer; }
+        .cat-pill.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+
+        /* CLEAN SORT + VIEW BAR */
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 12px 16px 8px;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+        }
+        .sort-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 220px;
+        }
+        .sort-icon {
+            position: absolute;
+            left: 10px;
+            color: var(--text-gray);
+            font-size: 13px;
+            pointer-events: none;
+        }
+        .sort-select {
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 28px 8px 30px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+        .sort-wrap::after {
+            content: "▾";
+            position: absolute;
+            right: 10px;
+            color: var(--text-gray);
+            font-size: 11px;
+            pointer-events: none;
+        }
+        .view-toggle {
+            display: inline-flex;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .view-btn {
+            width: 36px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .view-btn.active {
+            background: var(--bg-white);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+        .view-grid {
+            display: grid;
+            gap: 2px;
+            width: 16px;
+            height: 16px;
+        }
+        .view-grid i {
+            display: block;
+            background: var(--text-gray);
+            border-radius: 1px;
+        }
+        .view-btn.active .view-grid i { background: var(--primary); }
+        .view-grid.g2 { grid-template-columns: 1fr 1fr; }
+        .view-grid.g3 { grid-template-columns: 1fr 1fr 1fr; }
+        .view-grid.g3 i { height: 6px; }
+        .view-grid.g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+        .view-grid.g4 i { height: 3.5px; }
+        .sort-compact, .column-controls, .column-label, .column-btn, .filter-compact { display: none; }
+</style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <button class="header-back" id="headerBack" onclick="goBackHome()">←</button>
+            <div class="header-logo">
+                <span id="headerTitle">CICI - ISUFST-SEC Market Place</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-icon"></button>
+            <button class="header-icon"></button>
+        </div>
+    </div>
+
+    <!-- ========== MARKETPLACE SCREEN ========== -->
+    <div id="marketplace" class="screen active">
+        <div class="listings-section">
+            <div class="search-bar" style="margin-bottom: 16px;">
+                <input type="text" placeholder="Search books, notes, gadgets..." style="width: 100%; background: transparent; border: none; color: var(--text-dark);">
+            </div>
+
+
+
+            <div class="trending-section">
+                <div class="trending-title">🔥 Trending This Week</div>
+                <div class="trending-scroll">
+                    <div class="trending-card">
+                        <div class="trending-image">🎧</div>
+                        <div class="trending-info">
+                            <h3>Wireless Earbuds Pro</h3>
+                            <p>By: Carlo Santos • Like new</p>
+                            <div class="trending-price">₱1,500</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ 4.9 (18) • 👁️ 342 views</div>
+                        </div>
+                    </div>
+                    <div class="trending-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #065f46, #10b981);">📚</div>
+                        <div class="trending-info">
+                            <h3>Statistics Textbook</h3>
+                            <p>By: Ali Santos • Good condition</p>
+                            <div class="trending-price">₱800</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ 4.8 (24) • 👁️ 412 views</div>
+                        </div>
+                    </div>
+                    <div class="trending-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #7f1d1d, #991b1b);">👨‍🏫</div>
+                        <div class="trending-info">
+                            <h3>Python Tutoring</h3>
+                            <p>By: Jerome Diaz • Expert level</p>
+                            <div class="trending-price">₱300/hr</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ 4.7 (31) • 👁️ 589 views</div>
+                        </div>
+                    </div>
+                    <div class="trending-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #0c4a6e, #0284c7);">💻</div>
+                        <div class="trending-info">
+                            <h3>Laptop Dell XPS</h3>
+                            <p>By: Robert Flores • Barely used</p>
+                            <div class="trending-price">₱35,000</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ 5.0 (8) • 👁️ 267 views</div>
+                        </div>
+                    </div>
+                    <div class="trending-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #78350f, #b45309);">📝</div>
+                        <div class="trending-info">
+                            <h3>IT3120 Midterm Notes</h3>
+                            <p>By: Maria Delos • Handwritten</p>
+                            <div class="trending-price">₱250</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ 5.0 (15) • 👁️ 328 views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trending-section">
+                <div class="newly-added-title">✨ Newly Added</div>
+                <div class="newly-added-scroll">
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #3b82f6, #1e40af);">🖥️</div>
+                        <div class="trending-info">
+                            <h3>Desktop Monitor LG 27"</h3>
+                            <p>By: Kevin Santos • Just posted</p>
+                            <div class="trending-price">₱4,200</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 12 views</div>
+                        </div>
+                    </div>
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #065f46, #10b981);">📖</div>
+                        <div class="trending-info">
+                            <h3>Chemistry Textbook</h3>
+                            <p>By: Sarah Reyes • Posted 30 min ago</p>
+                            <div class="trending-price">₱1,200</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 8 views</div>
+                        </div>
+                    </div>
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #7f1d1d, #991b1b);">✏️</div>
+                        <div class="trending-info">
+                            <h3>Thesis Writing Help</h3>
+                            <p>By: Rosa Garcia • Posted 1 hour ago</p>
+                            <div class="trending-price">₱500</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 15 views</div>
+                        </div>
+                    </div>
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #0c4a6e, #0284c7);">🎮</div>
+                        <div class="trending-info">
+                            <h3>Nintendo Switch Console</h3>
+                            <p>By: Marcus Lee • Posted 2 hours ago</p>
+                            <div class="trending-price">₱18,500</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 24 views</div>
+                        </div>
+                    </div>
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #78350f, #b45309);">📐</div>
+                        <div class="trending-info">
+                            <h3>Complete Notes - Calculus</h3>
+                            <p>By: Angela Torres • Posted 3 hours ago</p>
+                            <div class="trending-price">₱350</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 32 views</div>
+                        </div>
+                    </div>
+                    <div class="newly-added-card">
+                        <div class="trending-image" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🎓</div>
+                        <div class="trending-info">
+                            <h3>IELTS Exam Prep Class</h3>
+                            <p>By: David Park • Posted 4 hours ago</p>
+                            <div class="trending-price">₱400/session</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 19 views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-wrapper">
+                <div class="sort-wrap">
+                    <span class="sort-icon">⇅</span>
+                    <select class="sort-select" aria-label="Sort listings">
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                    </select>
+                </div>
+
+                <div class="view-toggle" role="group" aria-label="Grid columns">
+                    <button class="view-btn active" onclick="setColumns(2)" title="2 columns">
+                        <span class="view-grid g2"><i></i><i></i><i></i><i></i></span>
+                    </button>
+                    <button class="view-btn" onclick="setColumns(3)" title="3 columns">
+                        <span class="view-grid g3"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    </button>
+                    <button class="view-btn" onclick="setColumns(4)" title="4 columns">
+                        <span class="view-grid g4"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="category-scroll" id="categoryScroll"></div>
+
+            <div id="genreEmpty" style="display: none; text-align: center; color: var(--text-gray); font-size: 13px; padding: 24px 16px;">No items in this genre yet.</div>
+
+            <div class="listings-grid cols-2" id="listingsGrid">
+                <div class="listing-card">
+                    <div class="listing-image green">📚</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Statistics Textbook</div>
+                        <div class="listing-condition">Good condition</div>
+                        <div class="listing-price">₱800</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">AS</div>
+                                <div class="seller-name">Ali Santos</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 4.8</div>
+                        </div>
+                        <button class="listing-action">View Details</button>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image brown">📋</div>
+                    <div class="listing-info">
+                        <div class="listing-title">IT3120 Midterm Notes</div>
+                        <div class="listing-condition">Comprehensive</div>
+                        <div class="listing-price">₱250</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">MD</div>
+                                <div class="seller-name">Maria Delos</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 5.0</div>
+                        </div>
+                        <button class="listing-action">View Details</button>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image blue">🎧</div>
+                    <div class="status-badge sold">Sold</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Wireless Earbuds</div>
+                        <div class="listing-condition">Original box</div>
+                        <div class="listing-price">₱1,200</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">CS</div>
+                                <div class="seller-name">Carlo Santos</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 4.9</div>
+                        </div>
+                        <button class="listing-action">Item Sold</button>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image darkred">👨‍🏫</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Python Tutoring</div>
+                        <div class="listing-condition">Service</div>
+                        <div class="listing-price">₱300/hour</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">JD</div>
+                                <div class="seller-name">Jerome Diaz</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 4.7</div>
+                        </div>
+                        <button class="listing-action">Inquire</button>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image green">✏️</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Thesis Writing Help</div>
+                        <div class="listing-condition">Editing & formatting</div>
+                        <div class="listing-price">₱500</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">RG</div>
+                                <div class="seller-name">Rosa Garcia</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 4.6</div>
+                        </div>
+                        <button class="listing-action">Contact</button>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image blue">🧮</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Scientific Calculator</div>
+                        <div class="listing-condition">Used • Good condition</div>
+                        <div class="listing-price">₱600</div>
+                        <div class="listing-seller">
+                            <div class="seller-info">
+                                <div class="seller-avatar">PL</div>
+                                <div class="seller-name">Paulo Lim</div>
+                            </div>
+                            <div style="font-size: 11px;">⭐ 4.5</div>
+                        </div>
+                        <button class="listing-action">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="load-more">📥 Load More Listings</button>
+        </div>
+    </div>
+
+    <!-- ========== CREATE LISTING SCREEN ========== -->
+    <div id="create-listing" class="screen">
+        <div class="create-listing-content">
+            <h2 class="form-title">+ Create New Listing</h2>
+
+            <div class="form-section">
+                <label class="form-label">Item Photo</label>
+                <div class="upload-area">
+                    <div class="upload-icon">📷</div>
+                    <div style="font-size: 12px; font-weight: 500; color: var(--text-dark); margin-bottom: 4px;">Tap to upload photo</div>
+                    <div style="font-size: 11px; color: var(--text-gray);">or drag and drop</div>
+                    <div style="font-size: 10px; color: var(--text-light); margin-top: 4px;">Max 5MB • JPG, PNG</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Item Title *</label>
+                <input type="text" class="form-input" id="listingTitle" placeholder="e.g. Statistics Textbook, Wireless Earbuds">
+                <div class="form-hint">Be clear and descriptive</div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" placeholder="Describe the item, condition, details..."></textarea>
+                <div class="form-hint">Include condition, any damage, what's included</div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Category *</label>
+                <select class="form-select" id="listingCategory"></select>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Price (₱) *</label>
+                <input type="number" class="form-input" id="listingPrice" placeholder="e.g. 800">
+                <div class="form-hint">For services, use hourly or per-project rate</div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Condition *</label>
+                <div class="condition-selector">
+                    <div class="condition-option">
+                        <input type="radio" name="condition" value="new">
+                        <div class="condition-label">New</div>
+                        <div class="condition-desc">Unused</div>
+                    </div>
+                    <div class="condition-option selected">
+                        <input type="radio" name="condition" value="like-new" checked>
+                        <div class="condition-label">Like New</div>
+                        <div class="condition-desc">Minimal use</div>
+                    </div>
+                    <div class="condition-option">
+                        <input type="radio" name="condition" value="used">
+                        <div class="condition-label">Used</div>
+                        <div class="condition-desc">Normal wear</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Where to Meet</label>
+                <input type="text" class="form-input" placeholder="e.g. Library entrance, Dorm Building A">
+                <div class="form-hint">Campus location where buyers can meet you</div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">Item Barcode *</label>
+                <div class="form-hint" style="margin-bottom: 8px;">Print or stick this on the item. Scan it at the POS when it sells.</div>
+                <button class="btn-secondary" type="button" onclick="generateBarcode()">Generate barcode</button>
+                <div id="barcodeBox" style="display: none; margin-top: 10px; text-align: center; background: #fff; padding: 12px; border-radius: 8px;">
+                    <svg id="barcodeSvg" style="max-width: 100%;"></svg>
+                    <div id="barcodeText" style="font-family: monospace; font-size: 14px; color: #000; margin-top: 4px;"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="form-label">📋 Preview</label>
+                <div class="preview-box">
+                    <div class="preview-image">Photo preview</div>
+                    <div class="preview-detail" style="font-weight: 600;">Statistics Textbook</div>
+                    <div class="preview-detail">Like new</div>
+                    <div class="preview-detail" style="font-weight: 600; color: var(--primary);">₱800</div>
+                    <div class="preview-detail">📍 Library entrance</div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <div class="tips-title">💡 Tips for success</div>
+                <ul class="tips-list">
+                    <li>✓ Clear photos sell faster</li>
+                    <li>✓ Honest condition = more trust</li>
+                    <li>✓ Competitive pricing = quick sales</li>
+                    <li>✓ Respond within 2 hrs = Quick Responder badge</li>
+                </ul>
+            </div>
+
+            <div class="btn-actions">
+                <button class="btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                <button class="btn-primary" onclick="postListing()">Post Listing</button>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">After You Post</div>
+                <div class="after-post-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📧</div>
+                        <div class="benefit-text">Get messages when buyers inquire</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">⭐</div>
+                        <div class="benefit-text">Earn ratings & build reputation</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🏆</div>
+                        <div class="benefit-text">Unlock seller badges</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📊</div>
+                        <div class="benefit-text">Track views & engagement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MESSAGES SCREEN ========== -->
+    <div id="messages" class="screen">
+        <div id="messagesLocked" style="display: none; text-align: center; padding: 48px 24px;">
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Log in to see your messages</div>
+            <div style="color: var(--text-gray); font-size: 13px; margin-bottom: 20px;">Chats with sellers and buyers appear here after you log in.</div>
+            <button class="btn-primary" onclick="openLoginFromProfile()">Log in</button>
+        </div>
+        <div id="messagesOpen">
+        <div class="messages-container">
+            <div class="messages-list">
+                <div class="messages-search">
+                    <input type="text" class="search-bar" placeholder="Search conversations...">
+                </div>
+                <div class="message-item active">
+                    <div class="message-header">
+                        <div class="message-avatar">MD</div>
+                        <div>
+                            <div class="message-name">Maria Delos</div>
+                            <div class="message-time">Now</div>
+                        </div>
+                    </div>
+                    <div class="message-preview">You: Can we meet at 3 PM?</div>
+                    <div class="message-preview">About: Statistics Textbook 🟢</div>
+                </div>
+                <div class="message-item">
+                    <div class="message-header">
+                        <div class="message-avatar" style="background: #10b981;">JP</div>
+                        <div>
+                            <div class="message-name">Juan Perez</div>
+                            <div class="message-time">2:15 PM</div>
+                        </div>
+                    </div>
+                    <div class="message-preview">Juan: Okay, I'll pick it up tomorrow</div>
+                    <div class="message-preview">About: IT3120 Midterm Notes</div>
+                </div>
+                <div class="message-item">
+                    <div class="message-header">
+                        <div class="message-avatar" style="background: #f59e0b;">CS</div>
+                        <div>
+                            <div class="message-name">Carlo Santos</div>
+                            <div class="message-time">Yesterday</div>
+                        </div>
+                    </div>
+                    <div class="message-preview">You: How much is it again?</div>
+                    <div class="message-preview">About: Wireless Earbuds</div>
+                </div>
+                <div class="message-item">
+                    <div class="message-header">
+                        <div class="message-avatar" style="background: #ef4444;">RG</div>
+                        <div>
+                            <div class="message-name">Rosa Garcia</div>
+                            <div class="message-time">3 days ago</div>
+                        </div>
+                    </div>
+                    <div class="message-preview">Rosa: Are you available for tutoring next week?</div>
+                    <div class="message-preview">About: Python Tutoring</div>
+                </div>
+            </div>
+            <div class="chat-window">
+                <div class="chat-header">MD - Maria Delos Santos - About: Statistics Textbook</div>
+                <div class="chat-messages">
+                    <div class="bubble received">Yes, they're still available! Very detailed notes with practice problems</div>
+                    <div class="bubble sent">Great! Can I meet you at the library tomorrow?</div>
+                    <div class="bubble received">Sure! 3 PM at the library entrance? I can show it to you first</div>
+                    <div class="bubble sent">Perfect! See you then!</div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <!-- ========== WISHLIST SCREEN ========== -->
+    <div id="wishlist" class="screen">
+        <div id="wishlistLocked" style="display: none; text-align: center; padding: 48px 24px;">
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Log in to see your wishlist</div>
+            <div style="color: var(--text-gray); font-size: 13px; margin-bottom: 20px;">Items you save with the heart appear here after you log in.</div>
+            <button class="btn-primary" onclick="openLoginFromProfile()">Log in</button>
+        </div>
+        <div id="wishlistOpen">
+        <div class="wishlist-content">
+            <div class="wishlist-title" id="wishlistTitle">❤️ My Wishlist</div>
+            <div class="wishlist-grid" id="wishlistGrid"></div>
+            <div id="wishlistEmpty" style="display: none; text-align: center; color: var(--text-gray); font-size: 13px; padding: 40px 16px;">
+                No saved items yet. Tap the ♡ on any listing to save it here.
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <!-- ========== PROFILE SCREEN ========== -->
+    <div id="profile" class="screen">
+        <div id="profileLocked" style="display: none; text-align: center; padding: 48px 24px;">
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Log in to see your profile</div>
+            <div style="color: var(--text-gray); font-size: 13px; margin-bottom: 20px;">Your listings, wishlist activity, and ratings are shown after you log in.</div>
+            <button class="btn-primary" onclick="openLoginFromProfile()">Log in</button>
+        </div>
+
+        <div id="profileOpen" class="profile-content">
+            <div id="notifyBox" style="margin-bottom: 12px;"></div>
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">HA</div>
+                    <div>
+                        <div class="profile-name">Hemar Paul Abian</div>
+                        <div class="profile-id">Student ID: 24-00200</div>
+                        <div class="profile-verified">✓ Verified</div>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Reviews</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                </div>
+
+                <div class="badges-section">
+                    <div class="badges-title">Badges</div>
+                    <div class="badges-list">
+                        <div class="badge trusted">⭐ Trusted Seller</div>
+                        <div class="badge quick">⚡ Quick Responder</div>
+                        <div class="badge top">🔥 Top Seller</div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="profile-btn" onclick="showScreen('create-listing', document.querySelector('[data-nav=marketplace]'))">+ New Listing</button>
+                    <button class="profile-btn secondary">Edit Profile</button>
+                </div>
+            </div>
+
+            <div class="listings-title">
+                <span id="myListingsTitle">My Listings</span>
+            </div>
+            <div id="myListings" style="padding: 0 16px; margin-bottom: 16px;"></div>
+
+            <div id="ratingsLocked" class="ratings-section" style="display: none;">
+                <div class="ratings-title">Recent Ratings</div>
+                <div style="text-align: center; color: var(--text-gray); font-size: 13px; padding: 20px 8px;">Log in to see your ratings.</div>
+                <button class="btn-primary" onclick="openLoginFromProfile()">Log in</button>
+            </div>
+            <div id="ratingsOpen">
+            <div class="ratings-section">
+                <div class="ratings-title">
+                    Recent Ratings (24 total)
+                    <span class="listings-view-all">See all</span>
+                </div>
+
+                <div class="rating-card">
+                    <div class="rating-header">
+                        <div class="rating-avatar">MD</div>
+                        <div>
+                            <div class="rating-name">Maria Delos Santos</div>
+                            <div class="rating-meta">About: Statistics Textbook</div>
+                        </div>
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="rating-text">"Exactly as described! Very satisfied with the quality and the quick response from the seller."</div>
+                    <div class="rating-date">Oct 3, 2024</div>
+                </div>
+
+                <div class="rating-card">
+                    <div class="rating-header">
+                        <div class="rating-avatar" style="background: #10b981;">JP</div>
+                        <div>
+                            <div class="rating-name">Juan Perez</div>
+                            <div class="rating-meta">About: IT3120 Midterm Notes</div>
+                        </div>
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="rating-text">"Helpful notes! Got all the important concepts covered. Met up at library as planned."</div>
+                    <div class="rating-date">Oct 1, 2024</div>
+                </div>
+
+                <div class="rating-card">
+                    <div class="rating-header">
+                        <div class="rating-avatar" style="background: #f59e0b;">CS</div>
+                        <div>
+                            <div class="rating-name">Carlo Santos</div>
+                            <div class="rating-meta">About: Wireless Earbuds</div>
+                        </div>
+                        <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="rating-text">"Excellent condition! Seller was honest about everything. Highly recommended!"</div>
+                    <div class="rating-date">Sep 28, 2024</div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ITEM DETAIL SCREEN ========== -->
+    <div id="item-detail" class="screen">
+        <div style="padding: 16px;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 14px;" onclick="showScreen('marketplace', document.querySelector('[data-nav=marketplace]'))">← Back to marketplace</button>
+
+            <div id="itemImage" style="font-size: 64px; text-align: center; padding: 36px 0; border-radius: 12px; margin: 16px 0; background: #1e3a6e;"></div>
+            <h2 id="itemTitle" style="margin-bottom: 4px;"></h2>
+            <div id="itemPrice" style="font-size: 22px; font-weight: 700; color: var(--success); margin-bottom: 16px;"></div>
+
+            <div class="form-section">
+                <label class="form-label">Item details</label>
+                <div id="itemDetails" style="font-size: 13px; line-height: 1.8;"></div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 16px;">
+                <button class="btn-secondary" id="inquireBtn" onclick="requireBuyer('inquire')" style="flex: 1;">Inquire</button>
+                <button class="btn-primary" id="buyBtn" onclick="requireBuyer('buy')" style="flex: 1;">Buy now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== BUYER LOGIN SCREEN ========== -->
+    <div id="buyer-login" class="screen">
+        <div style="padding: 16px;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 14px;" onclick="cancelBuyerLogin()">← Back</button>
+            <h2 id="buyerLoginTitle" style="margin: 16px 0 6px;"></h2>
+            <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 16px;">Students: log in with your student ID. Teachers: log in with your ISUFST email. Staff: log in with your staff username.</p>
+
+            <div class="form-section">
+                <label class="form-label">Student ID or ISUFST email *</label>
+                <input type="text" class="form-input" id="buyerId" placeholder="e.g. 24-00200 or name@isufst.edu.ph" autocapitalize="none" autocomplete="username">
+            </div>
+            <div class="form-section">
+                <label class="form-label">Password *</label>
+                <input type="password" class="form-input" id="buyerPass" placeholder="Your password" autocomplete="current-password" onkeypress="if(event.key==='Enter') buyerLogin()">
+            </div>
+            <div class="form-hint" id="buyerLoginError" style="color: #ef4444; min-height: 0; margin-bottom: 12px;"></div>
+
+            <button class="btn-primary" onclick="buyerLogin()">Log in</button>
+            <button class="btn-secondary" onclick="showScreen('buyer-signup', document.querySelector('[data-nav=marketplace]'))">New here? Create account</button>
+        </div>
+    </div>
+
+    <!-- ========== BUYER SIGN-UP SCREEN ========== -->
+    <div id="buyer-signup" class="screen">
+        <div style="padding: 16px;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 14px;" onclick="showScreen('buyer-login', document.querySelector('[data-nav=marketplace]'))">← Back to login</button>
+            <h2 style="margin: 16px 0 6px;">Create account</h2>
+            <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 16px;">We'll email you to verify your address and send order updates. Any email works, including Gmail.</p>
+
+            <div class="form-section">
+                <label class="form-label">I am a *</label>
+                <select class="form-select" id="signupType" onchange="toggleSignupType()" style="margin-bottom: 12px;">
+                    <option value="student">Student (I have a student ID)</option>
+                    <option value="teacher">Teacher or staff (I have an ISUFST email)</option>
+                </select>
+                <div id="signupIdBox">
+                    <label class="form-label">Student ID *</label>
+                    <input type="text" class="form-input" id="signupId" placeholder="e.g. 24-00200" autocapitalize="none">
+                </div>
+            </div>
+            <div class="form-section">
+                <label class="form-label" id="signupEmailLabel">Email (for notifications) *</label>
+                <input type="email" class="form-input" id="signupEmail" placeholder="e.g. juan@gmail.com" autocapitalize="none" autocomplete="email">
+                <div class="form-hint" id="signupEmailHint">Any email works, including Gmail.</div>
+            </div>
+            <div class="form-section">
+                <label class="form-label">Password * (min 8 characters)</label>
+                <input type="password" class="form-input" id="signupPass" placeholder="Create a password" autocomplete="new-password">
+            </div>
+            <div class="form-section">
+                <label class="form-label">Confirm password *</label>
+                <input type="password" class="form-input" id="signupPass2" placeholder="Type it again" autocomplete="new-password">
+            </div>
+            <div class="form-hint" id="signupError" style="color: #ef4444; min-height: 0; margin-bottom: 12px;"></div>
+
+            <button class="btn-primary" onclick="signupBuyer()">Create account</button>
+        </div>
+    </div>
+
+    <!-- ========== VERIFY EMAIL SCREEN ========== -->
+    <div id="buyer-verify" class="screen">
+        <div style="padding: 16px; text-align: center;">
+            <div style="font-size: 56px; margin-top: 24px;">📧</div>
+            <h2 style="margin: 12px 0 8px;">Check your email</h2>
+            <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 8px;">We sent a verification link to</p>
+            <p style="font-weight: 600; margin-bottom: 20px;" id="verifyEmail"></p>
+            <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 24px;">Open the email and tap the link to activate your account. Check your spam folder if you don't see it.</p>
+
+            <button class="btn-primary" onclick="openVerificationLink()">Open verification link (demo)</button>
+            <button class="btn-secondary" onclick="resendVerification()">Resend email</button>
+            <button class="btn-secondary" onclick="showScreen('buyer-login', document.querySelector('[data-nav=marketplace]'))">Back to login</button>
+        </div>
+    </div>
+
+    <!-- ========== ADMIN SCREEN ========== -->
+    <div id="admin" class="screen">
+        <div class="admin-content">
+            <!-- STAFF LOGIN -->
+            <div id="adminSignIn" style="display: none; background: var(--bg-white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-top: 8px;">
+                <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">⚙️ Staff login</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 14px;">Sign in with the account your Super Admin created for you.</div>
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="staffUser" placeholder="e.g. cashier1" autocapitalize="none" autocomplete="username" style="margin-bottom: 12px;">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="staffPass" placeholder="Your password" autocomplete="current-password" onkeypress="if(event.key==='Enter') adminSignIn()" style="margin-bottom: 6px;">
+                <div class="form-hint" id="staffLoginError" style="color: #ef4444; min-height: 0; margin-bottom: 10px;"></div>
+                <button class="btn-primary" onclick="adminSignIn()">Log in</button>
+            </div>
+
+            <div id="adminRoleBar" style="display: none; align-items: center; justify-content: space-between; font-size: 12px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin: 8px 0 12px;">
+                <span>Signed in as <b id="adminRoleName"></b></span>
+                <button class="btn-secondary" style="width: auto; padding: 4px 10px; margin: 0; font-size: 12px;" onclick="adminSignOut()">Sign out</button>
+            </div>
+            <div class="admin-header">
+                <div class="admin-title">⚙️ Admin Dashboard</div>
+                <div class="admin-subtitle">Manage marketplace listings, taxes, and categories</div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('approvals')">📋 Approvals</button>
+                <button class="admin-tab" onclick="switchAdminTab('pos')">🧾 POS</button>
+                <button class="admin-tab" onclick="switchAdminTab('tax')">💰 Tax</button>
+                <button class="admin-tab" onclick="switchAdminTab('genres')">🏷️ Categories</button>
+                <button class="admin-tab" onclick="switchAdminTab('stats')">📊 Stats</button>
+                <button class="admin-tab" onclick="switchAdminTab('staff')">👥 Staff</button>
+            </div>
+
+            <!-- APPROVALS TAB -->
+            <div id="approvals-panel" class="admin-panel active">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Pending Listings (3)</div>
+
+                <div class="pending-item">
+                    <div class="pending-header">
+                        <div class="pending-image">💻</div>
+                        <div class="pending-info">
+                            <h3>Laptop Dell XPS 13</h3>
+                            <p>By: Robert Flores • Posted 2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="pending-details">
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Price:</span>
+                            <span class="pending-detail-value">₱35,000</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Category:</span>
+                            <span class="pending-detail-value">Electronics & Gadgets</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Condition:</span>
+                            <span class="pending-detail-value">Like New</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Description:</span>
+                            <span class="pending-detail-value">Barely used, all accessories included</span>
+                        </div>
+                    </div>
+                    <div class="pending-actions">
+                        <button class="btn-approve" onclick="approveItem('laptop')">✓ Approve</button>
+                        <button class="btn-reject" onclick="rejectItem('laptop')">✕ Reject</button>
+                    </div>
+                </div>
+
+                <div class="pending-item">
+                    <div class="pending-header">
+                        <div class="pending-image">📚</div>
+                        <div class="pending-info">
+                            <h3>Chemistry Textbook Vol. 2</h3>
+                            <p>By: Sarah Reyes • Posted 5 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="pending-details">
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Price:</span>
+                            <span class="pending-detail-value">₱1,200</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Category:</span>
+                            <span class="pending-detail-value">Books & Textbooks</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Condition:</span>
+                            <span class="pending-detail-value">Good</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Description:</span>
+                            <span class="pending-detail-value">Used but all chapters clear, some highlights</span>
+                        </div>
+                    </div>
+                    <div class="pending-actions">
+                        <button class="btn-approve" onclick="approveItem('chemistry')">✓ Approve</button>
+                        <button class="btn-reject" onclick="rejectItem('chemistry')">✕ Reject</button>
+                    </div>
+                </div>
+
+                <div class="pending-item">
+                    <div class="pending-header">
+                        <div class="pending-image">🎨</div>
+                        <div class="pending-info">
+                            <h3>Graphic Design Tutoring</h3>
+                            <p>By: Marcus Chen • Posted 1 day ago</p>
+                        </div>
+                    </div>
+                    <div class="pending-details">
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Price:</span>
+                            <span class="pending-detail-value">₱600/hour</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Category:</span>
+                            <span class="pending-detail-value">Services</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Condition:</span>
+                            <span class="pending-detail-value">Service</span>
+                        </div>
+                        <div class="pending-detail-row">
+                            <span class="pending-detail-label">Description:</span>
+                            <span class="pending-detail-value">1-on-1 sessions in Adobe Suite, Figma, UI/UX design</span>
+                        </div>
+                    </div>
+                    <div class="pending-actions">
+                        <button class="btn-approve" onclick="approveItem('design')">✓ Approve</button>
+                        <button class="btn-reject" onclick="rejectItem('design')">✕ Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAX TAB -->
+            <div id="tax-panel" class="admin-panel">
+                <div class="admin-form">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Platform Tax Settings</div>
+
+                    <div class="form-group">
+                        <label>Platform Commission Rate (%)</label>
+                        <input type="number" min="0" max="100" step="0.5" value="5" placeholder="e.g. 5">
+                        <div style="font-size: 10px; color: var(--text-gray); margin-top: 4px;">Amount charged on each successful transaction</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tax rate by category (%)</label>
+                        <div style="font-size: 10px; color: var(--text-gray); margin-top: 4px; margin-bottom: 8px;">Categories added or removed in the Categories tab appear or disappear here.</div>
+                    </div>
+
+                    <div id="taxList" style="background: var(--bg-light); border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 12px;"></div>
+
+                    <button class="btn-add" style="background: var(--success);" onclick="saveTax()">💾 Save Tax Settings</button>
+                </div>
+            </div>
+
+            <!-- GENRES TAB -->
+            <div id="genres-panel" class="admin-panel">
+                <div class="admin-form">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Add new category</div>
+
+                    <div class="form-group">
+                        <label>Category name</label>
+                        <input type="text" id="catName" placeholder="e.g. Fiction, Science Textbooks, Tutoring">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tax rate (%)</label>
+                        <input type="number" id="catTax" min="0" max="100" step="0.5" value="0" placeholder="e.g. 2">
+                    </div>
+
+                    <div class="form-hint" id="catError" style="color: #ef4444; min-height: 0; margin-bottom: 8px;"></div>
+                    <button class="btn-add" onclick="addCategory()">+ Add category</button>
+                </div>
+
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Current categories (<span id="catCount"></span>)</div>
+                <div class="genre-list" id="categoryList"></div>
+
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin: 20px 0 12px;">Seller notices</div>
+                <div id="notifyLog" style="font-size: 12px;"></div>
+            </div>
+
+            <!-- POS TAB -->
+            <div id="pos-panel" class="admin-panel">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px;">Point of Sale</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 12px;">Scan an item's barcode to sell it. Each item can only be sold once.</div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <label class="form-label">Item barcode</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" class="form-input" id="posInput" placeholder="e.g. CHI1234567" autocapitalize="characters" onkeypress="if(event.key==='Enter') posSearch()" style="flex: 1;">
+                        <button class="btn-primary" style="width: auto; padding: 0 16px; margin: 0;" onclick="posSearch()">Search</button>
+                    </div>
+                    <div class="form-hint" id="posInputError" style="color: #ef4444; min-height: 0;"></div>
+                </div>
+
+                <div id="posResult" style="display: none;">
+                    <div style="background: var(--bg-light); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+                        <div style="font-weight: 600; margin-bottom: 4px;" id="posItemTitle"></div>
+                        <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 8px;">Seller: <span id="posItemSeller"></span> • Barcode: <span id="posItemBarcode"></span></div>
+                        <span id="posStatus" style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px;"></span>
+                    </div>
+
+                    <div id="posSaleBox">
+                        <div style="margin-bottom: 12px;">
+                            <div class="form-label">Price (cash)</div>
+                            <div style="font-size: 26px; font-weight: 700; color: var(--primary);" id="posPrice"></div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label class="form-label">Cash received (₱) *</label>
+                            <input type="number" class="form-input" id="posCash" placeholder="e.g. 1000" oninput="posUpdateChange()">
+                            <div class="form-hint" id="posCashError" style="color: #ef4444; min-height: 0;"></div>
+                        </div>
+                        <div style="background: var(--bg-light); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                            <div class="form-label">Change due</div>
+                            <div style="font-size: 20px; font-weight: 700;" id="posChange">₱0</div>
+                        </div>
+                        <button class="btn-primary" id="posCompleteBtn" onclick="posCompleteSale()" disabled>Complete sale</button>
+                        <button class="btn-secondary" onclick="posReset()">Cancel</button>
+                    </div>
+                </div>
+
+                <div id="posReceipt" style="display: none; background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <div style="text-align: center; font-size: 32px;">🧾</div>
+                    <div style="text-align: center; font-weight: 700; margin: 4px 0 12px;">Sale complete</div>
+                    <div id="posReceiptLines" style="font-size: 13px; line-height: 1.8;"></div>
+                    <button class="btn-secondary" id="posVoidBtn" onclick="posVoid()" style="margin-top: 12px; display: none; color: #b91c1c;">Void sale (Super Admin)</button>
+                    <button class="btn-primary" onclick="posReset()" style="margin-top: 12px;">Next item</button>
+                </div>
+            </div>
+
+            <!-- STAFF TAB (Super Admin only) -->
+            <div id="staff-panel" class="admin-panel">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px;">Staff accounts</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 12px;">Create or remove cashier and admin accounts. There must always be at least one Super Admin.</div>
+
+                <div id="staffList" style="margin-bottom: 16px;"></div>
+
+                <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
+                    <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">Add staff account</div>
+                    <label class="form-label">Full name</label>
+                    <input type="text" class="form-input" id="newStaffName" placeholder="e.g. Juan Dela Cruz" style="margin-bottom: 10px;">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="newStaffUser" placeholder="e.g. cashier2" autocapitalize="none" style="margin-bottom: 10px;">
+                    <label class="form-label">Temporary password (min 8 characters)</label>
+                    <input type="password" class="form-input" id="newStaffPass" placeholder="Temporary password" style="margin-bottom: 10px;">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="newStaffRole" style="margin-bottom: 6px;">
+                        <option value="cashier">Cashier</option>
+                        <option value="admin">Admin</option>
+                        <option value="superadmin">Super Admin</option>
+                    </select>
+                    <div class="form-hint" id="newStaffError" style="color: #ef4444; min-height: 0; margin-bottom: 10px;"></div>
+                    <button class="btn-primary" onclick="addStaff()">Create account</button>
+                </div>
+            </div>
+
+            <!-- STATS TAB -->
+            <div id="stats-panel" class="admin-panel">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Marketplace Statistics</div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-value">1,247</div>
+                        <div class="stat-card-label">Total Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">892</div>
+                        <div class="stat-card-label">Active Sellers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">3,156</div>
+                        <div class="stat-card-label">Active Buyers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">2,341</div>
+                        <div class="stat-card-label">Completed Sales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">₱847K</div>
+                        <div class="stat-card-label">Total GMV</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">₱42.3K</div>
+                        <div class="stat-card-label">Platform Revenue</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px; margin-top: 20px;">Category Breakdown</div>
+                
+                <div style="background: var(--bg-light); border-radius: 8px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                        <span style="font-size: 12px; color: var(--text-gray);">Books & Textbooks</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--text-dark);">342 listings • ₱234K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                        <span style="font-size: 12px; color: var(--text-gray);">Electronics & Gadgets</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--text-dark);">456 listings • ₱512K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                        <span style="font-size: 12px; color: var(--text-gray);">Study Notes</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--text-dark);">289 listings • ₱45K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-size: 12px; color: var(--text-gray);">Services</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--text-dark);">160 listings • ₱56K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN ACCESS BUTTON (hidden by default) -->
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-nav="marketplace" onclick="showScreen('marketplace', this)">
+            <span>Marketplace</span>
+        </button>
+        <button class="nav-item" data-nav="messages" onclick="showScreen('messages', this)">
+            <span>Messages</span>
+        </button>
+        <button class="nav-item" data-nav="wishlist" onclick="showScreen('wishlist', this)">
+            <span>Wishlist</span>
+        </button>
+        <button class="nav-item" data-nav="profile" onclick="showScreen('profile', this)">
+            <span>Profile</span>
+        </button>
+    </div>
+
+    <script>
+        function showScreen(screenId, button) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+
+            // Update active nav button
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (button) button.classList.add('active');
+
+            // Toggle back button
+            const backBtn = document.getElementById('headerBack');
+            if (screenId !== 'marketplace') {
+                backBtn.classList.add('show');
+            } else {
+                backBtn.classList.remove('show');
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function goBackHome() {
+            showScreen('marketplace', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        function setColumns(cols) {
+            const grid = document.getElementById('listingsGrid');
+            grid.classList.remove('cols-2', 'cols-3', 'cols-4');
+            grid.classList.add(`cols-${cols}`);
+
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            const target = document.querySelector(`.view-btn[onclick="setColumns(${cols})"]`);
+            if (target) target.classList.add('active');
+        }
+
+        // ----- Staff roles (demo: no password check; a backend must enforce this) -----
+        const ROLE_TABS = {
+            cashier: ['pos'],
+            admin: ['approvals', 'stats'],
+            superadmin: ['approvals', 'pos', 'tax', 'genres', 'stats', 'staff']
+        };
+        const ROLE_LABELS = { cashier: 'Cashier', admin: 'Admin', superadmin: 'Super Admin' };
+        let adminRole = null;
+        let currentStaff = null;   // { username, name, role }
+        const voidLog = [];
+
+        // Demo accounts. A real app stores these on the server with hashed passwords.
+        let staffAccounts = [
+            { username: 'superadmin', name: 'Super Admin', password: 'superadmin123', role: 'superadmin' },
+            { username: 'admin', name: 'Admin', password: 'admin12345', role: 'admin' },
+            { username: 'cashier', name: 'Cashier', password: 'cashier123', role: 'cashier' }
+        ];
+
+        function adminTabEl(name) {
+            return document.querySelector(`.admin-tab[onclick="switchAdminTab('${name}')"]`);
+        }
+
+        function renderAdmin() {
+            const signedIn = !!adminRole;
+            document.getElementById('adminSignIn').style.display = signedIn ? 'none' : 'block';
+            document.getElementById('adminRoleBar').style.display = signedIn ? 'flex' : 'none';
+            document.querySelector('.admin-header').style.display = signedIn ? 'block' : 'none';
+            document.querySelector('.admin-tabs').style.display = signedIn ? 'grid' : 'none';
+
+            const allowed = signedIn ? ROLE_TABS[adminRole] : [];
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                const name = (tab.getAttribute('onclick').match(/'(\w+)'/) || [])[1];
+                tab.style.display = allowed.includes(name) ? '' : 'none';
+            });
+            document.querySelectorAll('.admin-panel').forEach(panel => {
+                panel.style.display = signedIn ? '' : 'none';
+                panel.classList.remove('active');
+            });
+            if (signedIn) {
+                document.getElementById('adminRoleName').textContent = ROLE_LABELS[adminRole];
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                switchAdminTab(allowed[0]);
+            }
+        }
+
+        function adminSignIn() {
+            const user = document.getElementById('staffUser').value.trim().toLowerCase();
+            const pass = document.getElementById('staffPass').value;
+            const account = staffAccounts.find(a => a.username === user && a.password === pass);
+            const err = document.getElementById('staffLoginError');
+            if (!account) {
+                err.textContent = 'Invalid username or password';
+                return;
+            }
+            err.textContent = '';
+            currentStaff = { username: account.username, name: account.name, role: account.role };
+            adminRole = account.role;
+            document.getElementById('staffPass').value = '';
+            renderAdmin();
+        }
+
+        function adminSignOut() {
+            adminRole = null;
+            currentStaff = null;
+            posReset();
+            renderAdmin();
+            showScreen('marketplace', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        // ----- Staff management (Super Admin) -----
+        function renderStaffList() {
+            const list = document.getElementById('staffList');
+            const superCount = staffAccounts.filter(a => a.role === 'superadmin').length;
+            list.innerHTML = staffAccounts.map(a => {
+                const isMe = currentStaff && a.username === currentStaff.username;
+                const lastSuper = a.role === 'superadmin' && superCount === 1;
+                const blocked = isMe || lastSuper;
+                const reason = isMe ? 'You' : (lastSuper ? 'Last Super Admin' : '');
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">${a.name}</div>
+                            <div style="font-size: 11px; color: var(--text-gray);">@${a.username} • ${ROLE_LABELS[a.role]}</div>
+                        </div>
+                        ${blocked
+                            ? `<span style="font-size: 11px; color: var(--text-gray);">${reason}</span>`
+                            : `<button class="btn-secondary" style="width: auto; margin: 0; padding: 6px 12px; font-size: 12px; color: #b91c1c;" onclick="removeStaff('${a.username}')">Remove</button>`}
+                    </div>`;
+            }).join('');
+        }
+
+        function addStaff() {
+            const name = document.getElementById('newStaffName').value.trim();
+            const user = document.getElementById('newStaffUser').value.trim().toLowerCase();
+            const pass = document.getElementById('newStaffPass').value;
+            const role = document.getElementById('newStaffRole').value;
+            const err = document.getElementById('newStaffError');
+
+            if (!name) return err.textContent = 'Enter a full name';
+            if (!/^[a-z0-9_]{3,20}$/.test(user)) return err.textContent = 'Username: 3-20 letters, numbers or _';
+            if (staffAccounts.some(a => a.username === user)) return err.textContent = 'That username is already taken';
+            if (pass.length < 8) return err.textContent = 'Password must be at least 8 characters';
+
+            staffAccounts.push({ username: user, name: name, password: pass, role: role });
+            err.textContent = '';
+            ['newStaffName', 'newStaffUser', 'newStaffPass'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('newStaffRole').selectedIndex = 0;
+            renderStaffList();
+            alert(`Account @${user} created as ${ROLE_LABELS[role]}.`);
+        }
+
+        function removeStaff(username) {
+            const target = staffAccounts.find(a => a.username === username);
+            if (!target) return;
+            if (currentStaff && target.username === currentStaff.username) return alert("You can't remove your own account.");
+            const superCount = staffAccounts.filter(a => a.role === 'superadmin').length;
+            if (target.role === 'superadmin' && superCount === 1) return alert('There must always be at least one Super Admin.');
+            if (!confirm(`Remove ${target.name} (@${target.username})? They will no longer be able to log in.`)) return;
+
+            staffAccounts = staffAccounts.filter(a => a.username !== username);
+            renderStaffList();
+        }
+
+        function switchAdminTab(tabName) {
+            if (!adminRole || !ROLE_TABS[adminRole].includes(tabName)) return;
+            if (tabName === 'staff') renderStaffList();
+            if (tabName === 'genres') renderCategories();
+            if (tabName === 'tax') renderTax();
+            document.querySelectorAll('.admin-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(`${tabName}-panel`).classList.add('active');
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            const tab = adminTabEl(tabName);
+            if (tab) tab.classList.add('active');
+        }
+
+        function approveItem(itemId) {
+            alert(`✓ Listing "${itemId}" approved and published to marketplace!`);
+            event.target.closest('.pending-item').style.opacity = '0.5';
+            event.target.closest('.pending-item').style.pointerEvents = 'none';
+        }
+
+        function rejectItem(itemId) {
+            const reason = prompt('Enter reason for rejection:');
+            if (reason) {
+                alert(`✕ Listing "${itemId}" rejected.\nReason: ${reason}\nStudent has been notified.`);
+                event.target.closest('.pending-item').style.opacity = '0.5';
+                event.target.closest('.pending-item').style.pointerEvents = 'none';
+            }
+        }
+
+        function openStaffLogin() {
+            renderAdmin();
+            showScreen('admin', document.querySelector('[data-nav=profile]'));
+        }
+    </script>
+
+
+    <script>
+        function setCategory(btn) {
+            document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script>
+        // ----- Shared listing store (posted listings + POS read from here) -----
+        const listings = [
+            { barcode: 'CHI1234567', title: 'Statistics Textbook', price: 800, seller: 'Ali Santos', status: 'available' },
+            { barcode: 'CHI7654321', title: 'IT3120 Notes', price: 250, seller: 'Maria Delos', status: 'available' }
+        ];
+        const BASE_ITEMS_SOLD = 24;
+        let posItem = null;
+
+        // ----- Barcode generation for the listing form -----
+        let currentBarcode = null;
+        function generateBarcode() {
+            currentBarcode = 'CHI' + Math.random().toString().slice(2, 9);
+            document.getElementById('barcodeText').textContent = currentBarcode;
+            document.getElementById('barcodeBox').style.display = 'block';
+            JsBarcode('#barcodeSvg', currentBarcode, { format: 'CODE128', width: 2, height: 50, displayValue: false });
+        }
+
+        // ----- Post listing: validate, save to store, go to success -----
+        function postListing() {
+            if (!buyerUser) {
+                alert('Log in to post a listing');
+                pendingBuyerAction = null;
+                showScreen('buyer-login', document.querySelector('[data-nav=marketplace]'));
+                return;
+            }
+            const title = document.getElementById('listingTitle').value.trim();
+            const category = document.getElementById('listingCategory').value;
+            const price = Number(document.getElementById('listingPrice').value);
+            const condition = document.querySelector('input[name="condition"]:checked');
+
+            if (!title) return alert('Enter an item title');
+            if (!category) return alert('Choose a category');
+            if (!(price > 0)) return alert('Enter a price');
+            if (!condition) return alert('Choose a condition');
+            if (!currentBarcode) return alert('Generate a barcode before posting');
+
+            listings.push({
+                barcode: currentBarcode,
+                title: title,
+                price: price,
+                seller: 'Hemar Abian',
+                status: 'available'
+            });
+            // Show the new item in Browse, with its own heart and details
+            const categoryText = category;   // the genre name
+            const catObj = categories.find(c => c.name === categoryText);
+            const emoji = catObj ? catObj.emoji : '📦';
+            const optionEl = condition.closest('.condition-option');
+            const condText = optionEl.querySelector('.condition-label').textContent + ' • ' + optionEl.querySelector('.condition-desc').textContent;
+
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            card.innerHTML = '<div class="listing-image" style="background: linear-gradient(135deg, #1e3a6e, #3b82f6);"></div>' +
+                '<div class="listing-info">' +
+                '<div class="listing-title"></div>' +
+                '<div class="listing-condition"></div>' +
+                '<div class="listing-price"></div>' +
+                '<div class="listing-seller"><div class="seller-info"><div class="seller-avatar">HA</div><div class="seller-name">Hemar Abian</div></div></div>' +
+                '<button class="listing-action">View Details</button>' +
+                '</div>';
+            card.querySelector('.listing-image').textContent = emoji;
+            card.querySelector('.listing-title').textContent = title;
+            card.querySelector('.listing-condition').textContent = condText;
+            card.querySelector('.listing-price').textContent = '₱' + price.toLocaleString();
+            document.getElementById('listingsGrid').prepend(card);
+
+            const newly = document.createElement('div');
+            newly.className = 'newly-added-card';
+            newly.innerHTML = '<div class="trending-image" style="background: linear-gradient(135deg, #1e3a6e, #3b82f6);"></div>' +
+                '<div class="trending-info"><h3></h3><p></p><div class="trending-price"></div>' +
+                '<div style="font-size: 11px; color: var(--text-gray);">⭐ New • 👁️ 0 views</div></div>';
+            newly.querySelector('.trending-image').textContent = emoji;
+            newly.querySelector('h3').textContent = title;
+            newly.querySelector('p').textContent = 'By: Hemar Abian • Just posted';
+            newly.querySelector('.trending-price').textContent = '₱' + price.toLocaleString();
+            const newlyRow = document.querySelector('.newly-added-scroll');
+            if (newlyRow) newlyRow.prepend(newly);
+
+            const sellerId = buyerUser.id;
+            registerCard(card, { category: categoryText, sellerId: sellerId, sellerName: 'Hemar Abian' });
+            registerCard(newly, { category: categoryText, sellerId: sellerId, sellerName: 'Hemar Abian' });
+            addWishButtons();
+            renderAll();
+
+            alert('Listing posted!\nBarcode: ' + currentBarcode);
+
+            // Reset the form for the next listing
+            document.getElementById('listingTitle').value = '';
+            document.getElementById('listingPrice').value = '';
+            document.getElementById('listingCategory').selectedIndex = 0;
+            document.getElementById('barcodeBox').style.display = 'none';
+            currentBarcode = null;
+            showScreen('marketplace', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        // Drafts stay in memory; the form keeps its values until posted
+        let draftCount = 0;
+        function saveDraft() {
+            const title = document.getElementById('listingTitle').value.trim();
+            if (!title) return alert('Add an item title before saving a draft');
+            draftCount++;
+            alert('Draft saved: "' + title + '". Post it when you are ready.');
+        }
+
+        // ----- Categories, tax, item registry, filtering, seller notices -----
+        let categories = [
+            { name: 'Fiction', emoji: '📚', tax: 2 },
+            { name: 'Science Textbooks', emoji: '📚', tax: 2 },
+            { name: 'Programming Books', emoji: '📚', tax: 2 },
+            { name: 'Lecture Notes', emoji: '📝', tax: 3 },
+            { name: 'Exam Prep', emoji: '📝', tax: 3 },
+            { name: 'Headphones', emoji: '🎧', tax: 8 },
+            { name: 'Laptops & Computers', emoji: '🎧', tax: 8 },
+            { name: 'Tutoring', emoji: '⭐', tax: 10 },
+            { name: 'Writing Services', emoji: '⭐', tax: 10 },
+            { name: 'Printing & Design', emoji: '⭐', tax: 10 }
+        ];
+
+        // Sample listings → category (anything not listed only shows under All Items)
+        const CATEGORY_BY_TITLE = {
+            'Wireless Earbuds Pro': 'Headphones',
+            'Wireless Earbuds': 'Headphones',
+            'Earbuds': 'Headphones',
+            'Statistics Textbook': 'Science Textbooks',
+            'Chemistry Textbook': 'Science Textbooks',
+            'Python Tutoring': 'Tutoring',
+            'IELTS Exam Prep Class': 'Tutoring',
+            'Laptop Dell XPS': 'Laptops & Computers',
+            'Laptop Dell XPS 13': 'Laptops & Computers',
+            'Desktop Monitor LG 27"': 'Laptops & Computers',
+            'IT3120 Midterm Notes': 'Exam Prep',
+            'IT3120 Notes': 'Exam Prep',
+            'Complete Notes - Calculus': 'Lecture Notes',
+            'Thesis Writing Help': 'Writing Services'
+        };
+
+        // One entry per real item (same title + price), however many cards show it
+        const registry = new Map();   // key -> { key, title, price, category, sellerId, sellerName, status, cards[] }
+        const notices = [];           // { id, sellerId, sellerName, itemKey, itemTitle, oldCategory, open }
+        let selectedCategory = null;  // null = All Items
+
+        function categoryNamed(name) {
+            return categories.find(c => c.name === name);
+        }
+
+        function sampleSellerName(data) {
+            const byLine = data.details.find(d => d.startsWith('By:'));
+            if (byLine) return byLine.replace(/^By:\s*/, '').split('•')[0].trim();
+            return data.details.find(d => /^[A-Z][a-z]+ [A-Z][a-z]+/.test(d)) || 'Seller';
+        }
+
+        function registerCard(card, opts) {
+            const data = getCardData(card);
+            const key = itemKey(data);
+            let entry = registry.get(key);
+            if (!entry) {
+                entry = {
+                    key: key,
+                    title: data.title,
+                    price: data.price,
+                    category: opts.category,
+                    sellerId: opts.sellerId,
+                    sellerName: opts.sellerName,
+                    status: 'active',
+                    cards: []
+                };
+                registry.set(key, entry);
+            }
+            entry.cards.push(card);
+            card.dataset.key = key;
+        }
+
+        function registerSampleCards() {
+            document.querySelectorAll('#marketplace .trending-card, #marketplace .newly-added-card, #marketplace .listing-card').forEach(card => {
+                if (card.dataset.key) return;
+                const data = getCardData(card);
+                registerCard(card, {
+                    category: CATEGORY_BY_TITLE[data.title] || null,
+                    sellerId: 'sample:' + data.title,
+                    sellerName: sampleSellerName(data)
+                });
+            });
+        }
+
+        function applyFilters() {
+            let visibleGrid = 0;
+            registry.forEach(entry => {
+                const show = entry.status === 'active' && (!selectedCategory || entry.category === selectedCategory);
+                entry.cards.forEach(card => {
+                    card.style.display = show ? '' : 'none';
+                    if (show && card.classList.contains('listing-card')) visibleGrid++;
+                });
+            });
+            const empty = document.getElementById('genreEmpty');
+            if (empty) empty.style.display = visibleGrid === 0 ? 'block' : 'none';
+        }
+
+        function renderPills() {
+            const row = document.getElementById('categoryScroll');
+            row.innerHTML = '';
+            const items = [{ label: 'All Items', value: null }].concat(
+                categories.map(c => ({ label: c.emoji + ' ' + c.name, value: c.name }))
+            );
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'cat-pill' + (selectedCategory === item.value ? ' active' : '');
+                btn.textContent = item.label;
+                btn.onclick = () => { selectedCategory = item.value; renderAll(); };
+                row.appendChild(btn);
+            });
+        }
+
+        function renderCreateOptions() {
+            const select = document.getElementById('listingCategory');
+            const current = select.value;
+            select.innerHTML = '<option value="">-- Select category --</option>';
+            categories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.name;
+                opt.textContent = c.emoji + ' ' + c.name;
+                select.appendChild(opt);
+            });
+            if (categoryNamed(current)) select.value = current;
+        }
+
+        function renderCategories() {
+            const list = document.getElementById('categoryList');
+            document.getElementById('catCount').textContent = categories.length;
+            list.innerHTML = '';
+            categories.forEach((c, i) => {
+                const row = document.createElement('div');
+                row.className = 'genre-item';
+                row.textContent = c.emoji + ' ' + c.name;
+                const del = document.createElement('button');
+                del.className = 'genre-delete';
+                del.textContent = '✕';
+                del.onclick = () => removeCategory(i);
+                row.appendChild(del);
+                list.appendChild(row);
+            });
+            renderNoticeLog();
+        }
+
+        function renderTax() {
+            const list = document.getElementById('taxList');
+            list.innerHTML = '';
+            if (!categories.length) {
+                list.textContent = 'No categories yet. Add one in the Categories tab.';
+                return;
+            }
+            const grid = document.createElement('div');
+            grid.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 12px;';
+            categories.forEach(c => {
+                const cell = document.createElement('div');
+                const name = document.createElement('div');
+                name.style.cssText = 'color: var(--text-gray); margin-bottom: 6px;';
+                name.textContent = c.name;
+                const input = document.createElement('input');
+                input.type = 'number'; input.min = '0'; input.max = '100'; input.step = '0.5';
+                input.value = c.tax;
+                input.style.cssText = 'width: 100%; padding: 6px; background: var(--bg-white); border: 1px solid var(--border); border-radius: 4px; color: var(--text-dark);';
+                input.onchange = () => { c.tax = Number(input.value) || 0; };
+                cell.append(name, input);
+                grid.appendChild(cell);
+            });
+            list.appendChild(grid);
+        }
+
+        function saveTax() {
+            // Rates are stored as they're edited
+            alert('Tax settings saved.');
+        }
+
+        function addCategory() {
+            const name = document.getElementById('catName').value.trim();
+            const tax = Number(document.getElementById('catTax').value) || 0;
+            const err = document.getElementById('catError');
+            if (!name) return err.textContent = 'Enter a category name';
+            if (categoryNamed(name)) return err.textContent = 'That category already exists';
+            categories.push({ name: name, emoji: '📦', tax: tax });
+            err.textContent = '';
+            document.getElementById('catName').value = '';
+            document.getElementById('catTax').value = '0';
+            renderAll();
+        }
+
+        function removeCategory(index) {
+            const cat = categories[index];
+            if (!cat) return;
+            const affected = Array.from(registry.values()).filter(e => e.category === cat.name && e.status === 'active');
+            showRemoveDialog(cat, index, affected);
+        }
+
+        function showRemoveDialog(cat, index, affected) {
+            const overlay = document.createElement('div');
+            overlay.id = 'catModal';
+            overlay.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px;';
+
+            const box = document.createElement('div');
+            box.style.cssText = 'background: var(--bg-white); border-radius: 12px; padding: 20px; max-width: 360px; width: 100%; max-height: 80vh; overflow-y: auto;';
+
+            const title = document.createElement('div');
+            title.style.cssText = 'font-weight: 700; font-size: 15px; margin-bottom: 8px;';
+            title.textContent = 'Remove "' + cat.name + '"?';
+
+            const text = document.createElement('div');
+            text.style.cssText = 'font-size: 13px; color: var(--text-gray); margin-bottom: 12px;';
+            text.textContent = affected.length
+                ? affected.length + ' listing(s) use this category. They will be hidden from Browse until each seller picks a new category, and each seller will be notified.'
+                : 'No listings use this category. It will be removed.';
+
+            box.append(title, text);
+
+            if (affected.length) {
+                const ul = document.createElement('div');
+                ul.style.cssText = 'font-size: 12px; background: var(--bg-light); border-radius: 6px; padding: 10px; margin-bottom: 14px;';
+                affected.forEach(e => {
+                    const row = document.createElement('div');
+                    row.style.marginBottom = '4px';
+                    row.textContent = e.title + ' — ' + e.sellerName;
+                    ul.appendChild(row);
+                });
+                box.appendChild(ul);
+            }
+
+            const actions = document.createElement('div');
+            actions.style.cssText = 'display: flex; gap: 8px;';
+            const cancel = document.createElement('button');
+            cancel.className = 'btn-secondary';
+            cancel.style.cssText = 'flex: 1; margin: 0;';
+            cancel.textContent = 'Cancel';
+            cancel.onclick = () => overlay.remove();
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'btn-primary';
+            confirmBtn.style.cssText = 'flex: 1; margin: 0; background: #b91c1c;';
+            confirmBtn.textContent = affected.length ? 'Remove & notify sellers' : 'Remove';
+            confirmBtn.onclick = () => {
+                confirmRemoveCategory(cat, index, affected);
+                overlay.remove();
+            };
+            actions.append(cancel, confirmBtn);
+            box.appendChild(actions);
+
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
+        }
+
+        function confirmRemoveCategory(cat, index, affected) {
+            categories.splice(index, 1);
+            if (selectedCategory === cat.name) selectedCategory = null;
+
+            affected.forEach(e => {
+                e.status = 'needs_category';
+                e.category = null;
+                notices.push({
+                    id: Date.now() + Math.random(),
+                    sellerId: e.sellerId,
+                    sellerName: e.sellerName,
+                    itemKey: e.key,
+                    itemTitle: e.title,
+                    oldCategory: cat.name,
+                    open: true
+                });
+            });
+            renderAll();
+            alert('"' + cat.name + '" removed. ' + affected.length + ' seller(s) notified to choose a new category.');
+        }
+
+        function resolveNotice(id, newCategory) {
+            const notice = notices.find(n => n.id === id);
+            if (!notice || !newCategory) return;
+            const entry = registry.get(notice.itemKey);
+            if (entry) {
+                entry.category = newCategory;
+                entry.status = 'active';
+            }
+            notice.open = false;
+            renderAll();
+        }
+
+        function renderNotifyBox() {
+            const box = document.getElementById('notifyBox');
+            box.innerHTML = '';
+            if (!buyerUser) return;
+            const mine = notices.filter(n => n.open && n.sellerId === buyerUser.id);
+            if (!mine.length) return;
+
+            const head = document.createElement('div');
+            head.style.cssText = 'font-weight: 600; font-size: 13px; margin-bottom: 8px;';
+            head.textContent = 'Action needed: choose a new category (' + mine.length + ')';
+            box.appendChild(head);
+
+            mine.forEach(n => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; font-size: 12px;';
+                const msg = document.createElement('div');
+                msg.style.marginBottom = '8px';
+                msg.textContent = 'The category "' + n.oldCategory + '" was removed. Please re-categorize "' + n.itemTitle + '" so buyers can find it.';
+                const sel = document.createElement('select');
+                sel.className = 'form-select';
+                sel.style.marginBottom = '8px';
+                const first = document.createElement('option');
+                first.value = '';
+                first.textContent = '-- Choose new category --';
+                sel.appendChild(first);
+                categories.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.name;
+                    opt.textContent = c.emoji + ' ' + c.name;
+                    sel.appendChild(opt);
+                });
+                const save = document.createElement('button');
+                save.className = 'btn-primary';
+                save.style.margin = '0';
+                save.textContent = 'Save category';
+                save.onclick = () => {
+                    if (!sel.value) return alert('Choose a new category first');
+                    resolveNotice(n.id, sel.value);
+                };
+                card.append(msg, sel, save);
+                box.appendChild(card);
+            });
+        }
+
+        function renderNoticeLog() {
+            const log = document.getElementById('notifyLog');
+            if (!log) return;
+            log.innerHTML = '';
+            if (!notices.length) {
+                log.textContent = 'No seller notices sent yet.';
+                return;
+            }
+            notices.slice().reverse().forEach(n => {
+                const row = document.createElement('div');
+                row.style.cssText = 'background: var(--bg-light); border-radius: 6px; padding: 8px 10px; margin-bottom: 6px;';
+                row.textContent = n.sellerName + ' • "' + n.itemTitle + '" (was ' + n.oldCategory + ') • ' + (n.open ? 'Waiting for new category' : 'Resolved');
+                log.appendChild(row);
+            });
+        }
+
+        function renderMyListings() {
+            const box = document.getElementById('myListings');
+            const title = document.getElementById('myListingsTitle');
+            box.innerHTML = '';
+
+            if (!buyerUser) {
+                title.textContent = 'My Listings';
+                const msg = document.createElement('div');
+                msg.style.cssText = 'text-align: center; color: var(--text-gray); font-size: 13px; padding: 24px 8px;';
+                msg.textContent = 'Log in to see your listings.';
+                box.appendChild(msg);
+                const btn = document.createElement('button');
+                btn.className = 'btn-primary';
+                btn.textContent = 'Log in';
+                btn.onclick = openLoginFromProfile;
+                box.appendChild(btn);
+                return;
+            }
+
+            // Each real item appears once, even if several cards show it
+            const mine = Array.from(registry.values()).filter(e => e.sellerId === buyerUser.id);
+            title.textContent = 'My Listings (' + mine.length + ')';
+
+            if (!mine.length) {
+                const msg = document.createElement('div');
+                msg.style.cssText = 'text-align: center; color: var(--text-gray); font-size: 13px; padding: 24px 8px;';
+                msg.textContent = "You haven't posted any items yet. Tap + to post your first listing.";
+                box.appendChild(msg);
+                return;
+            }
+
+            mine.forEach(e => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display: flex; align-items: center; gap: 12px; background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px;';
+
+                const img = document.createElement('div');
+                const sample = e.cards[0] ? getCardData(e.cards[0]) : null;
+                img.textContent = sample ? sample.emoji : '📦';
+                img.style.cssText = 'width: 52px; height: 52px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; background: #1e3a6e;';
+
+                const info = document.createElement('div');
+                info.style.cssText = 'flex: 1; min-width: 0;';
+                const t = document.createElement('div');
+                t.style.cssText = 'font-weight: 600; font-size: 13px;';
+                t.textContent = e.title;
+                const sub = document.createElement('div');
+                sub.style.cssText = 'font-size: 11px; color: var(--text-gray);';
+                sub.textContent = e.price + (e.category ? ' • ' + e.category : ' • No category');
+                info.append(t, sub);
+
+                const badge = document.createElement('span');
+                const needs = e.status === 'needs_category';
+                badge.textContent = needs ? 'Needs category' : 'Active';
+                badge.style.cssText = 'font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; color: #fff; background: ' + (needs ? '#f59e0b' : '#3b82f6') + ';';
+
+                row.append(img, info, badge);
+                box.appendChild(row);
+            });
+        }
+
+        function openLoginFromProfile() {
+            pendingBuyerAction = null;
+            showScreen('buyer-login', document.querySelector('[data-nav=profile]'));
+        }
+
+        function renderProfileLock() {
+            const logged = !!buyerUser;
+            document.getElementById('profileLocked').style.display = logged ? 'none' : 'block';
+            document.getElementById('profileOpen').style.display = logged ? 'block' : 'none';
+            ['messages', 'wishlist'].forEach(id => {
+                document.getElementById(id + 'Locked').style.display = logged ? 'none' : 'block';
+                document.getElementById(id + 'Open').style.display = logged ? 'block' : 'none';
+            });
+        }
+
+        function renderRatings() {
+            const logged = !!buyerUser;
+            document.getElementById('ratingsLocked').style.display = logged ? 'none' : 'block';
+            document.getElementById('ratingsOpen').style.display = logged ? 'block' : 'none';
+        }
+
+        function renderAll() {
+            renderProfileLock();
+            renderRatings();
+            renderCategories();
+            renderTax();
+            renderPills();
+            renderCreateOptions();
+            applyFilters();
+            renderNotifyBox();
+            renderMyListings();
+        }
+
+        // Run after every script on the page has loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            registerSampleCards();
+            renderAll();
+        });
+
+        // ----- POS (lives in the admin dashboard) -----
+        function posSetError(id, msg) {
+            document.getElementById(id).textContent = msg;
+        }
+
+        function posSearch() {
+            const code = document.getElementById('posInput').value.trim().toUpperCase();
+            posSetError('posInputError', '');
+            if (!code) return posSetError('posInputError', 'Enter a barcode');
+
+            const item = listings.find(l => l.barcode === code);
+            if (!item) {
+                posSetError('posInputError', 'No item found with barcode ' + code);
+                document.getElementById('posResult').style.display = 'none';
+                posItem = null;
+                return;
+            }
+
+            posItem = item;
+            document.getElementById('posItemTitle').textContent = item.title;
+            document.getElementById('posItemSeller').textContent = item.seller;
+            document.getElementById('posItemBarcode').textContent = item.barcode;
+            document.getElementById('posPrice').textContent = '₱' + item.price.toLocaleString();
+            document.getElementById('posReceipt').style.display = 'none';
+
+            const pill = document.getElementById('posStatus');
+            if (item.status === 'sold') {
+                pill.textContent = 'ALREADY SOLD';
+                pill.style.background = '#fee2e2';
+                pill.style.color = '#b91c1c';
+                document.getElementById('posSaleBox').style.display = 'none';
+            } else {
+                pill.textContent = 'AVAILABLE';
+                pill.style.background = '#dcfce7';
+                pill.style.color = '#15803d';
+                document.getElementById('posSaleBox').style.display = 'block';
+                document.getElementById('posCash').value = '';
+                posUpdateChange();
+            }
+            document.getElementById('posResult').style.display = 'block';
+        }
+
+        function posUpdateChange() {
+            if (!posItem) return;
+            const cash = Number(document.getElementById('posCash').value);
+            const price = posItem.price;
+            const enough = document.getElementById('posCash').value !== '' && cash >= price;
+            document.getElementById('posChange').textContent = enough ? '₱' + (cash - price).toLocaleString() : '₱0';
+            document.getElementById('posCompleteBtn').disabled = !enough;
+            posSetError('posCashError',
+                document.getElementById('posCash').value !== '' && cash < price
+                    ? 'Cash is less than the price (₱' + price.toLocaleString() + ')' : '');
+        }
+
+        function posCompleteSale() {
+            if (!posItem || posItem.status === 'sold') return;
+            const cash = Number(document.getElementById('posCash').value);
+            if (cash < posItem.price) return;
+
+            const now = new Date();
+            posItem.status = 'sold';
+            posItem.soldAt = now;
+            posItem.soldBy = currentStaff.username;
+
+            document.getElementById('posReceiptLines').innerHTML =
+                '<div><b>Item:</b> ' + posItem.title + '</div>' +
+                '<div><b>Barcode:</b> ' + posItem.barcode + '</div>' +
+                '<div><b>Seller:</b> ' + posItem.seller + '</div>' +
+                '<div><b>Price:</b> ₱' + posItem.price.toLocaleString() + '</div>' +
+                '<div><b>Cash:</b> ₱' + cash.toLocaleString() + '</div>' +
+                '<div><b>Change:</b> ₱' + (cash - posItem.price).toLocaleString() + '</div>' +
+                '<div><b>Cashier:</b> ' + currentStaff.name + '</div>' +
+                '<div><b>Time:</b> ' + now.toLocaleString() + '</div>';
+
+            document.getElementById('posSaleBox').style.display = 'none';
+            document.getElementById('posStatus').textContent = '';
+            document.getElementById('posStatus').style.background = 'transparent';
+            document.getElementById('posReceipt').style.display = 'block';
+            document.getElementById('posVoidBtn').style.display = adminRole === 'superadmin' ? 'block' : 'none';
+        }
+
+        function posVoid() {
+            if (adminRole !== 'superadmin' || !posItem) return;
+            const reason = prompt('Reason for voiding this sale (required):');
+            if (!reason || !reason.trim()) return;
+            voidLog.push({ barcode: posItem.barcode, title: posItem.title, reason: reason.trim(), by: currentStaff.username, at: new Date() });
+            posItem.status = 'available';
+            posItem.soldAt = null;
+            alert('Sale voided and logged. The item is available again.');
+            posReset();
+        }
+
+        function posReset() {
+            posItem = null;
+            document.getElementById('posInput').value = '';
+            posSetError('posInputError', '');
+            document.getElementById('posResult').style.display = 'none';
+            document.getElementById('posReceipt').style.display = 'none';
+            document.getElementById('posCash').value = '';
+            document.getElementById('posInput').focus();
+        }
+    </script>
+
+    <script>
+        // ----- Buyer: item details, inquire, buy now (login required) -----
+        // Demo buyer accounts. A real app checks these on the server.
+        // Demo accounts. A real app stores these on the server with hashed passwords.
+        const INSTITUTION_DOMAIN = '@isufst.edu.ph';
+        const buyerAccounts = [
+            { type: 'student', id: '24-00200', email: 'hemar@example.com', password: 'hemar1234', verified: true },
+            { type: 'teacher', id: null, email: 'teacher@isufst.edu.ph', password: 'teacher123', verified: true }
+        ];
+        let buyerUser = null;
+        let pendingBuyerAction = null;
+        let currentItem = null;
+        let pendingVerification = null;   // account waiting for email verification
+
+        // Open details when a card or its View Details button is tapped
+        document.getElementById('marketplace').addEventListener('click', function (e) {
+            const heart = e.target.closest('.wish-btn');
+            if (heart) {
+                e.stopPropagation();
+                toggleWishlist(heart.closest('.trending-card, .newly-added-card, .listing-card'));
+                return;
+            }
+            const card = e.target.closest('.trending-card, .newly-added-card, .listing-card');
+            if (card) openItemDetail(card);
+        });
+
+        function getCardData(card) {
+            const imageEl = card.querySelector('[class*="image"]');
+            const titleEl = card.querySelector('[class*="title"]') || card.querySelector('h3');
+            const priceEl = card.querySelector('[class*="price"]') ||
+                Array.from(card.querySelectorAll('div, span, p')).find(el => el.children.length === 0 && /₱/.test(el.textContent));
+            const title = titleEl ? titleEl.textContent.trim() : 'Item';
+            const price = priceEl ? priceEl.textContent.trim() : '';
+
+            // Every other text line on the card becomes a detail row (seller, condition, rating, views)
+            const details = Array.from(card.querySelectorAll('*'))
+                .filter(el => el.children.length === 0 && !el.closest('.wish-btn'))
+                .map(el => el.textContent.trim())
+                .filter(t => t && t !== title && t !== price && t !== 'View Details');
+
+            return {
+                title,
+                price,
+                details,
+                emoji: imageEl ? imageEl.textContent.trim() : '📦',
+                imageStyle: imageEl ? (imageEl.getAttribute('style') || '') : ''
+            };
+        }
+
+        function openItemDetail(card) {
+            showItemDetail(getCardData(card));
+        }
+
+        function showItemDetail(data) {
+            currentItem = data;
+
+            const img = document.getElementById('itemImage');
+            img.textContent = data.emoji;
+            img.setAttribute('style', data.imageStyle + ';font-size: 64px; text-align: center; padding: 36px 0; border-radius: 12px; margin: 16px 0;' + (data.imageStyle.includes('background') ? '' : ' background: #1e3a6e;'));
+
+            document.getElementById('itemTitle').textContent = data.title;
+            document.getElementById('itemPrice').textContent = data.price;
+
+            const list = document.getElementById('itemDetails');
+            list.innerHTML = '';
+            data.details.forEach(text => {
+                const row = document.createElement('div');
+                row.textContent = text;
+                list.appendChild(row);
+            });
+
+            showScreen('item-detail', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        function requireBuyer(action) {
+            if (!buyerUser) {
+                pendingBuyerAction = action;
+                document.getElementById('buyerLoginTitle').textContent =
+                    action === 'buy' ? 'Log in to buy now' : 'Log in to inquire';
+                document.getElementById('buyerId').value = '';
+                document.getElementById('buyerPass').value = '';
+                document.getElementById('buyerLoginError').textContent = '';
+                showScreen('buyer-login', document.querySelector('[data-nav=marketplace]'));
+                return;
+            }
+            runBuyerAction(action);
+        }
+
+        function runBuyerAction(action) {
+            if (!currentItem) return;
+            if (action === 'inquire') {
+                alert('Your inquiry about "' + currentItem.title + '" was sent to the seller. Follow up in Messages.');
+            } else if (action === 'buy') {
+                if (confirm('Buy "' + currentItem.title + '" for ' + currentItem.price + '?\nThe seller will confirm and you will meet on campus.')) {
+                    alert('Purchase request sent to the seller.');
+                }
+            }
+        }
+
+        function buyerLogin() {
+            const input = document.getElementById('buyerId').value.trim();
+            const pass = document.getElementById('buyerPass').value;
+            const err = document.getElementById('buyerLoginError');
+
+            // Staff accounts use the same form and go to the staff dashboard
+            const staff = staffAccounts.find(a => a.username === input.toLowerCase() && a.password === pass);
+            if (staff) {
+                err.textContent = '';
+                document.getElementById('buyerPass').value = '';
+                currentStaff = { username: staff.username, name: staff.name, role: staff.role };
+                adminRole = staff.role;
+                pendingBuyerAction = null;
+                renderAdmin();
+                showScreen('admin', document.querySelector('[data-nav=profile]'));
+                return;
+            }
+            const account = buyerAccounts.find(a =>
+                (a.id && a.id === input) || a.email === input.toLowerCase()
+            );
+
+            if (!account || account.password !== pass) {
+                err.textContent = 'Invalid ID/email or password';
+                return;
+            }
+            if (!account.verified) {
+                err.textContent = 'Verify your email first. We sent a link to ' + account.email + '.';
+                pendingVerification = account;
+                return;
+            }
+            err.textContent = '';
+            buyerUser = { id: account.id || account.email, type: account.type };
+            renderAll();
+            document.getElementById('buyerPass').value = '';
+            const action = pendingBuyerAction;
+            pendingBuyerAction = null;
+            if (action) {
+                showScreen('item-detail', document.querySelector('[data-nav=marketplace]'));
+                runBuyerAction(action);
+            } else {
+                showScreen('profile', document.querySelector('[data-nav=profile]'));
+            }
+        }
+
+        function toggleSignupType() {
+            const teacher = document.getElementById('signupType').value === 'teacher';
+            document.getElementById('signupIdBox').style.display = teacher ? 'none' : 'block';
+            document.getElementById('signupEmailLabel').textContent = teacher ? 'ISUFST email *' : 'Email (for notifications) *';
+            document.getElementById('signupEmailHint').textContent = teacher
+                ? 'Use your institutional email, ending in ' + INSTITUTION_DOMAIN + '.'
+                : 'Any email works, including Gmail.';
+        }
+
+        function signupBuyer() {
+            const type = document.getElementById('signupType').value;
+            const id = document.getElementById('signupId').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('signupPass').value;
+            const pass2 = document.getElementById('signupPass2').value;
+            const err = document.getElementById('signupError');
+
+            if (type === 'student') {
+                if (!/^\d{2}-\d{5}$/.test(id)) return err.textContent = 'Enter a valid student ID (e.g. 24-00200)';
+                if (buyerAccounts.some(a => a.id === id)) return err.textContent = 'An account with this student ID already exists';
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err.textContent = 'Enter a valid email address';
+            if (type === 'teacher' && !email.endsWith(INSTITUTION_DOMAIN)) return err.textContent = 'Teachers must use an ISUFST email ending in ' + INSTITUTION_DOMAIN;
+            if (buyerAccounts.some(a => a.email === email)) return err.textContent = 'That email is already used by another account';
+            if (pass.length < 8) return err.textContent = 'Password must be at least 8 characters';
+            if (pass !== pass2) return err.textContent = 'Passwords do not match';
+
+            const account = { type: type, id: type === 'student' ? id : null, email: email, password: pass, verified: false };
+            buyerAccounts.push(account);
+            pendingVerification = account;
+            err.textContent = '';
+            ['signupId', 'signupEmail', 'signupPass', 'signupPass2'].forEach(f => document.getElementById(f).value = '');
+            document.getElementById('verifyEmail').textContent = account.email;
+            showScreen('buyer-verify', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        function openVerificationLink() {
+            if (!pendingVerification) return;
+            // In a real app this link is opened from the email and calls the server
+            pendingVerification.verified = true;
+            alert('Email verified! You can now log in with your student ID.');
+            pendingVerification = null;
+            document.getElementById('buyerLoginError').textContent = '';
+            showScreen('buyer-login', document.querySelector('[data-nav=marketplace]'));
+        }
+
+        function resendVerification() {
+            if (!pendingVerification) return;
+            alert('A new verification link was sent to ' + pendingVerification.email + '.');
+        }
+
+        function cancelBuyerLogin() {
+            const fromItem = !!pendingBuyerAction;
+            pendingBuyerAction = null;
+            if (fromItem) showScreen('item-detail', document.querySelector('[data-nav=marketplace]'));
+            else showScreen('profile', document.querySelector('[data-nav=profile]'));
+        }
+
+        // ----- Wishlist (bookmarks) -----
+        const wishlist = new Map();   // key -> item data
+
+        function itemKey(data) {
+            return data.title + '|' + data.price;
+        }
+
+        function toggleWishlist(card) {
+            if (!card) return;
+            const data = getCardData(card);
+            const key = itemKey(data);
+            if (wishlist.has(key)) wishlist.delete(key);
+            else wishlist.set(key, data);
+            refreshWishButtons();
+            renderWishlist();
+        }
+
+        function removeFromWishlist(key) {
+            wishlist.delete(key);
+            refreshWishButtons();
+            renderWishlist();
+        }
+
+        function refreshWishButtons() {
+            document.querySelectorAll('.wish-btn').forEach(btn => {
+                const saved = wishlist.has(btn.dataset.key);
+                btn.textContent = saved ? '♥' : '♡';
+                btn.style.color = saved ? '#ef4444' : '#fff';
+                btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+                btn.setAttribute('aria-label', saved ? 'Remove from wishlist' : 'Save to wishlist');
+            });
+        }
+
+        function renderWishlist() {
+            const grid = document.getElementById('wishlistGrid');
+            const empty = document.getElementById('wishlistEmpty');
+            document.getElementById('wishlistTitle').textContent = '❤️ My Wishlist (' + wishlist.size + ' item' + (wishlist.size === 1 ? '' : 's') + ')';
+            grid.innerHTML = '';
+            empty.style.display = wishlist.size ? 'none' : 'block';
+
+            wishlist.forEach((data, key) => {
+                const card = document.createElement('div');
+                card.className = 'wishlist-card';
+
+                const img = document.createElement('div');
+                img.className = 'wishlist-image';
+                img.textContent = data.emoji;
+                img.setAttribute('style', data.imageStyle);
+
+                const info = document.createElement('div');
+                info.className = 'wishlist-info';
+                const title = document.createElement('div');
+                title.style.fontWeight = '600';
+                title.textContent = data.title;
+                const price = document.createElement('div');
+                price.style.color = 'var(--success)';
+                price.textContent = data.price;
+
+                const view = document.createElement('button');
+                view.className = 'btn-secondary';
+                view.style.cssText = 'width: 100%; margin: 8px 0 4px; padding: 8px;';
+                view.textContent = 'View';
+                view.onclick = () => showItemDetail(data);
+
+                const remove = document.createElement('button');
+                remove.className = 'btn-secondary';
+                remove.style.cssText = 'width: 100%; margin: 0; padding: 8px; color: #b91c1c;';
+                remove.textContent = 'Remove';
+                remove.onclick = () => removeFromWishlist(key);
+
+                info.append(title, price, view, remove);
+                card.append(img, info);
+                grid.appendChild(card);
+            });
+        }
+
+        // Add the heart button to every card, then sync states
+        function addWishButtons() {
+            document.querySelectorAll('.trending-card, .newly-added-card, .listing-card').forEach(card => {
+                if (card.querySelector('.wish-btn')) return;
+                const data = getCardData(card);
+                const btn = document.createElement('button');
+                btn.className = 'wish-btn';
+                btn.dataset.key = itemKey(data);
+                btn.textContent = '♡';
+                btn.setAttribute('aria-label', 'Save to wishlist');
+                btn.style.cssText = 'position:absolute; top:8px; left:8px; z-index:1; width:32px; height:32px; border-radius:50%; border:none; background:rgba(0,0,0,0.45); color:#fff; font-size:17px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;';
+                card.style.position = 'relative';
+                card.appendChild(btn);
+            });
+            refreshWishButtons();
+        }
+
+        addWishButtons();
+        document.querySelector('[data-nav=wishlist]').addEventListener('click', renderWishlist);
+        renderWishlist();
+    </script>
+</body>
+</html>
