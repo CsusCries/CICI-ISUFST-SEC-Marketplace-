@@ -163,6 +163,7 @@
 
         function switchAdminTab(tabName) {
             if (!adminRole || !ROLE_TABS[adminRole].includes(tabName)) return;
+            if (tabName !== 'pos') posStopScan();
             if (tabName === 'staff') renderStaffList();
             if (tabName === 'genres') renderCategories();
             if (tabName === 'tax') renderTax();
@@ -741,6 +742,62 @@
         // ----- POS (lives in the admin dashboard) -----
         function posSetError(id, msg) {
             document.getElementById(id).textContent = msg;
+        }
+
+        // ----- POS: type or scan with the camera (browser barcode reader, no library) -----
+        let posStream = null;
+        let posScanFrame = null;
+
+        function posSetMode(mode) {
+            posStopScan();
+            const scanning = mode === 'scan';
+            document.getElementById('posTypeRow').style.display = scanning ? 'none' : '';
+            document.getElementById('posScanBox').hidden = !scanning;
+            document.getElementById('posModeType').classList.toggle('active', !scanning);
+            document.getElementById('posModeScan').classList.toggle('active', scanning);
+            if (scanning) posStartScan();
+            else document.getElementById('posInput').focus();
+        }
+
+        async function posStartScan() {
+            const status = document.getElementById('posScanStatus');
+            const video = document.getElementById('posVideo');
+            if (!('BarcodeDetector' in window) || !navigator.mediaDevices || !window.isSecureContext) {
+                status.textContent = 'Camera scanning needs HTTPS and a browser with barcode support (Chrome on Android). Type the code instead.';
+                return;
+            }
+            try {
+                const detector = new BarcodeDetector({ formats: ['code_128'] });
+                posStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = posStream;
+                await video.play();
+                status.textContent = 'Point the camera at the barcode';
+                const scanFrame = async () => {
+                    if (!posStream) return;
+                    try {
+                        const codes = await detector.detect(video);
+                        if (codes.length) {
+                            document.getElementById('posInput').value = codes[0].rawValue;
+                            posSetMode('type');
+                            posSearch();
+                            return;
+                        }
+                    } catch (e) { /* frame not ready yet, try the next one */ }
+                    posScanFrame = requestAnimationFrame(scanFrame);
+                };
+                scanFrame();
+            } catch (e) {
+                status.textContent = 'Could not open the camera. Check the camera permission, or type the code instead.';
+            }
+        }
+
+        function posStopScan() {
+            if (posScanFrame) cancelAnimationFrame(posScanFrame);
+            posScanFrame = null;
+            if (posStream) posStream.getTracks().forEach(track => track.stop());
+            posStream = null;
+            const video = document.getElementById('posVideo');
+            if (video) video.srcObject = null;
         }
 
         function posSearch() {

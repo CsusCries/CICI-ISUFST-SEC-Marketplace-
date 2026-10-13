@@ -1729,3 +1729,11 @@
 .panel-soft { background: var(--bg-light); border-radius: 8px; padding: 16px; }
 .span-meta-muted { font-size: 12px; color: var(--text-gray); }
 .span-meta-bold { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+
+/* POS type / scan switch */
+.scan-mode-bar { display: flex; gap: 8px; margin-bottom: 10px; }
+.scan-mode-btn { flex: 1; }
+.scan-mode-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.scan-row { display: flex; gap: 8px; }
+.scan-box { margin-top: 10px; text-align: center; }
+.scan-video { width: 100%; max-width: 360px; border-radius: 8px; background: #000; }

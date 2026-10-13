@@ -890,9 +890,17 @@
 
                 <div class="panel-bordered-compact">
                     <label class="form-label">Item barcode</label>
-                    <div style="display: flex; gap: 8px;">
+                    <div class="scan-mode-bar">
+                        <button class="btn-secondary scan-mode-btn active" id="posModeType" onclick="posSetMode('type')">⌨️ Type</button>
+                        <button class="btn-secondary scan-mode-btn" id="posModeScan" onclick="posSetMode('scan')">📷 Scan</button>
+                    </div>
+                    <div class="scan-row" id="posTypeRow">
                         <input type="text" class="form-input button-grow" id="posInput" placeholder="e.g. CHI1234567" autocapitalize="characters" onkeypress="if(event.key==='Enter') posSearch()">
                         <button class="btn-primary btn-inline-primary" onclick="posSearch()">Search</button>
+                    </div>
+                    <div class="scan-box" id="posScanBox" hidden>
+                        <video class="scan-video" id="posVideo" playsinline muted></video>
+                        <div class="form-hint" id="posScanStatus">Point the camera at the barcode</div>
                     </div>
                     <div class="form-hint form-error-min" id="posInputError"></div>
                 </div>
