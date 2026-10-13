@@ -1,0 +1,13 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Local Claude settings (personal, not shared)
+.claude/settings.local.json
+
+# Temporary files
+*.tmp
+*.log
