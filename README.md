@@ -10,7 +10,9 @@ No install needed. Open `index.html` in any browser.
 
 ```
 .
-├── index.html          # The site (inline CSS and JavaScript)
+├── index.html          # The site markup
+├── css/styles.css      # All styles
+├── js/script.js        # All JavaScript
 ├── docs/               # Report notes, screenshots, and drafts
 ├── .claude/skills/     # Custom Claude Code skills for this project
 └── README.md
