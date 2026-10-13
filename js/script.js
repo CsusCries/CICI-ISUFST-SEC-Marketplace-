@@ -795,7 +795,8 @@
         function posCompleteSale() {
             if (!posItem || posItem.status === 'sold') return;
             const cash = Number(document.getElementById('posCash').value);
-            if (cash < posItem.price) return;
+            posSetError('posCashError', '');
+            if (cash < posItem.price) return posSetError('posCashError', 'Cash is less than the price');
 
             const now = new Date();
             posItem.status = 'sold';
